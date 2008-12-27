@@ -1,0 +1,8 @@
+## Interface: 30000
+## Author: p3lim
+## Version: 30000.wowi:revision
+## Title: oUF Reputation
+## Notes: Reputation Bar support for oUF layouts.
+## RequiredDeps: oUF
+
+oUF_Reputation.lua
