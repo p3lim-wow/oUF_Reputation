@@ -26,6 +26,7 @@ local function Update(self, event, unit)
 		bar:SetValue(value)
 		bar:EnableMouse()
 		bar:SetStatusBarColor(unpack(bar.Colors or {FACTION_BAR_COLORS[id].r, FACTION_BAR_COLORS[id].g, FACTION_BAR_COLORS[id].b}))
+		bar:Show()
 
 		if(not bar.MouseOver) then
 			bar:SetAlpha(1)
@@ -45,11 +46,13 @@ local function Update(self, event, unit)
 			bar:SetScript('OnEnter', function() bar:SetAlpha(1) end)
 			bar:SetScript('OnLeave', function() bar:SetAlpha(0) end)
 		end
+	else
+		bar:Hide()
 	end
 end
 
 local function Enable(self, unit)
-	local reputation = self.Experience
+	local reputation = self.Reputation
 	if(reputation and unit == 'player') then
 		self:RegisterEvent('UPDATE_FACTION', Update)
 
