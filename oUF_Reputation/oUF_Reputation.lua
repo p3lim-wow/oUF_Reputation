@@ -14,6 +14,8 @@
 
 --]]
 local function Tooltip(self, min, max, name, id)
+	if(self.MouseOver) then self:SetAlpha(1) end
+
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 5, -5)
 	GameTooltip:AddLine(string.format('%s (%s)', name, _G['FACTION_STANDING_LABEL'..id]))
 	GameTooltip:AddLine(string.format('%d/%d (%.1f%%)', min, max, min/max*100))
@@ -22,42 +24,37 @@ end
 
 local function Update(self, event, unit)
 	local bar = self.Reputation
-	
-	if(GetWatchedFactionInfo()) then
-		local name, id, min, max, value = GetWatchedFactionInfo()
+	if(not GetWatchedFactionInfo()) then return bar:Hide()
 
-		bar:SetMinMaxValues(min, max)
-		bar:SetValue(value)
-		bar:EnableMouse()
-		bar:Show()
+	local name, id, min, max, value = GetWatchedFactionInfo()
+	bar:SetMinMaxValues(min, max)
+	bar:SetValue(value)
+	bar:Show()
 
-		if(bar.Text) then
-			if(bar.OverrideText) then
-				bar:OverrideText(min, max, value, name, id)
-			else
-				bar.Text:SetFormattedText('%d / %d - %s', value - min, max - min, name)
-			end
+	if(bar.Text) then
+		if(bar.OverrideText) then
+			bar:OverrideText(min, max, value, name, id)
+		else
+			bar.Text:SetFormattedText('%d / %d - %s', value - min, max - min, name)
 		end
-
-		if(bar.Tooltip and bar.MouseOver) then
-			bar:SetScript('OnEnter', function() bar:SetAlpha(1); Tooltip(bar, value - min, max - min, name, id) end)
-		elseif(bar.Tooltip and not bar.MouseOver) then
-			bar:SetScript('OnEnter', function() Tooltip(bar, value - min, max - min, name, id) end)
-		end
-
-		if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, id) end
-	else
-		bar:Hide()
 	end
+
+	if(bar.Tooltip) then
+		bar:SetScript('OnEnter', function()
+			Tooltip(bar, value - min, max - min, name, id)
+		end)
+	end
+
+	if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, id) end
 end
 
-local function Enable(self)
+local function Enable(self, unit)
 	local reputation = self.Reputation
-	if(reputation) then
+	if(reputation and unit == 'player') then
 		self:RegisterEvent('UPDATE_FACTION', Update)
 
-		if(not reputation:GetStatusBarTexture()) then
-			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+		if(reputation.Tooltip or reputation.MouseOver) then
+			reputation:EnableMouse()
 		end
 
 		if(reputation.Tooltip and reputation.MouseOver) then
@@ -70,6 +67,11 @@ local function Enable(self)
 		elseif(reputation.Tooltip and not reputation.MouseOver) then
 			reputation:SetScript('OnLeave', function() GameTooltip:Hide() end)
 		end
+
+		if(not reputation:GetStatusBarTexture()) then
+			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+		end
+
 
 		return true
 	end
