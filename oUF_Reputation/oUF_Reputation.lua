@@ -24,7 +24,7 @@ end
 
 local function Update(self, event, unit)
 	local bar = self.Reputation
-	if(not GetWatchedFactionInfo()) then return bar:Hide()
+	if(not GetWatchedFactionInfo()) then return bar:Hide() end
 
 	local name, id, min, max, value = GetWatchedFactionInfo()
 	bar:SetMinMaxValues(min, max)
