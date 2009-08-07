@@ -47,17 +47,17 @@ local function update(self, event, unit)
 end
 
 local function enable(self, unit)
-	local reputation = self.Reputation
-	if(reputation and unit == 'player') then
-		if(not reputation:GetStatusBarTexture()) then
-			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+	local bar = self.Reputation
+	if(bar and unit == 'player') then
+		if(not bar:GetStatusBarTexture()) then
+			bar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 		end
 
 		self:RegisterEvent('UPDATE_FACTION', update)
 
-		if(reputation.Tooltip) then
-			reputation:EnableMouse()
-			reputation:SetScript('OnLeave', GameTooltip_OnLeave)
+		if(bar.Tooltip) then
+			bar:EnableMouse()
+			bar:SetScript('OnLeave', GameTooltip_OnLeave)
 		end
 
 		return true
