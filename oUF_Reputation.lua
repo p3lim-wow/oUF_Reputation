@@ -1,21 +1,19 @@
 local function Update(self, event, unit)
-	local bar = self.Reputation
-	if(not GetWatchedFactionInfo()) then return bar:Hide() end
-
-	local name, id, min, max, value = GetWatchedFactionInfo()
-	bar:SetMinMaxValues(min, max)
-	bar:SetValue(value)
-	bar:Show()
-
-	if(bar.Text) then
-		if(bar.OverrideText) then
-			bar:OverrideText(min, max, value, name, id)
-		else
-			bar.Text:SetFormattedText('%d / %d - %s', value - min, max - min, name)
-		end
+	local reputation = self.Reputation
+	
+	if(not GetWatchedFactionInfo()) then
+		return reputation:Hide()
+	else
+		reputation:Show()
 	end
 
-	if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, id) end
+	local name, standing, min, max, value = GetWatchedFactionInfo()
+	reputation:SetMinMaxValues(min, max)
+	reputation:SetValue(value)
+
+	if(reputation.PostUpdate) then
+		return reputation:PostUpdate(unit, name, standing, min, max, value)
+	end
 end
 
 local function Path(self, ...)
@@ -27,15 +25,15 @@ local function ForceUpdate(element)
 end
 
 local function Enable(self, unit)
-	local bar = self.Reputation
-	if(bar) then
-		bar.__owner = self
-		bar.ForceUpdate = ForceUpdate
+	local reputation = self.Reputation
+	if(reputation) then
+		reputation.__owner = self
+		reputation.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UPDATE_FACTION', Path)
 
-		if(not bar:GetStatusBarTexture()) then
-			bar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+		if(not reputation:GetStatusBarTexture()) then
+			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 		end
 
 		return true
