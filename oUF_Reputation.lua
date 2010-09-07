@@ -1,18 +1,3 @@
---[[
-
-	Elements handled:
-	 .Reputation [statusbar]
-	 .Reputation.Text [fontstring] (optional)
-
-	Booleans:
-	 - Tooltip
-
-	Functions that can be overridden from within a layout:
-	 - PostUpdate(self, event, unit, bar, min, max, value, name, id)
-	 - OverrideText(bar, min, max, value, name, id)
-
---]]
-
 local function tooltip(self)
 	local name, id, min, max, value = GetWatchedFactionInfo()
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 5, -5)
