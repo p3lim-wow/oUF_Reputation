@@ -1,11 +1,3 @@
-local function tooltip(self)
-	local name, id, min, max, value = GetWatchedFactionInfo()
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 5, -5)
-	GameTooltip:AddLine(string.format('%s (%s)', name, _G['FACTION_STANDING_LABEL'..id]))
-	GameTooltip:AddLine(string.format('%d / %d (%d%%)', value - min, max - min, (value - min) / (max - min) * 100))
-	GameTooltip:Show()
-end
-
 local function update(self, event, unit)
 	local bar = self.Reputation
 	if(not GetWatchedFactionInfo()) then return bar:Hide() end
@@ -34,12 +26,6 @@ local function enable(self, unit)
 		end
 
 		self:RegisterEvent('UPDATE_FACTION', update)
-
-		if(bar.Tooltip) then
-			bar:EnableMouse()
-			bar:HookScript('OnLeave', GameTooltip_Hide)
-			bar:HookScript('OnEnter', tooltip)
-		end
 
 		return true
 	end
