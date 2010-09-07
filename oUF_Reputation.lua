@@ -1,4 +1,4 @@
-local function update(self, event, unit)
+local function Update(self, event, unit)
 	local bar = self.Reputation
 	if(not GetWatchedFactionInfo()) then return bar:Hide() end
 
@@ -18,23 +18,27 @@ local function update(self, event, unit)
 	if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, id) end
 end
 
-local function enable(self, unit)
+local function Path(self, ...)
+	return (self.Reputation.Override or Update) (self, ...)
+end
+
+local function Enable(self, unit)
 	local bar = self.Reputation
-	if(bar and unit == 'player') then
+	if(bar) then
+		self:RegisterEvent('UPDATE_FACTION', Path)
+
 		if(not bar:GetStatusBarTexture()) then
 			bar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 		end
-
-		self:RegisterEvent('UPDATE_FACTION', update)
 
 		return true
 	end
 end
 
-local function disable(self)
+local function Disable(self)
 	if(self.Reputation) then
-		self:UnregisterEvent('UPDATE_FACTION', update)
+		self:UnregisterEvent('UPDATE_FACTION', Path)
 	end
 end
 
-oUF:AddElement('Reputation', update, enable, disable)
+oUF:AddElement('Reputation', Path, Enable, Disable)
