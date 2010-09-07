@@ -22,9 +22,16 @@ local function Path(self, ...)
 	return (self.Reputation.Override or Update) (self, ...)
 end
 
+local function ForceUpdate(element)
+	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+end
+
 local function Enable(self, unit)
 	local bar = self.Reputation
 	if(bar) then
+		bar.__owner = self
+		bar.ForceUpdate = ForceUpdate
+
 		self:RegisterEvent('UPDATE_FACTION', Path)
 
 		if(not bar:GetStatusBarTexture()) then
