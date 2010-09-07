@@ -1,3 +1,7 @@
+local _, ns = ...
+local oUF = ns.oUF or oUF
+assert(oUF, 'oUF Reputation was unable to locate oUF install')
+
 local function Update(self, event, unit)
 	local reputation = self.Reputation
 	
