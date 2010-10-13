@@ -2,6 +2,26 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
+local tagStrings = {
+	['currep'] = function(unit)
+		local _, _, _, _, value = GetWatchedFactionInfo()
+		return value
+	end,
+	['maxrep'] = function(unit)
+		local _, _, _, max = GetWatchedFactionInfo()
+		return max
+	end,
+	['perrep'] = function(unit)
+		local _, _, _, max, value = GetWatchedFactionInfo()
+		return math.floor(value / max * 100 + 0.5)
+	end,
+	['standing'] = function(unit)
+		local _, standing = GetWatchedFactionInfo()
+		return standing
+	end,
+	['reputation'] = GetWatchedFactionInfo
+}
+
 local function Update(self, event, unit)
 	local reputation = self.Reputation
 	
@@ -35,6 +55,11 @@ local function Enable(self, unit)
 		reputation.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UPDATE_FACTION', Path)
+
+		for tag, func in pairs(tagStrings) do
+			oUF.Tags[tag] = func
+			oUF.TagEvents[tag] = 'UPDATE_FACTION'
+		end
 
 		if(not reputation:GetStatusBarTexture()) then
 			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
