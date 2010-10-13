@@ -1,6 +1,6 @@
 ## Interface: 40000
 ## Author: p3lim
-## Version: 40000.3-Release
+## Version: 40000.4-Release
 ## Title: oUF Reputation
 ## Notes: Reputation Bar support for oUF layouts.
 ## RequiredDeps: oUF
