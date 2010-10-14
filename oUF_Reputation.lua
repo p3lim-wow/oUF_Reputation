@@ -19,7 +19,9 @@ for tag, func in pairs({
 		local _, standing = GetWatchedFactionInfo()
 		return standing
 	end,
-	['reputation'] = GetWatchedFactionInfo
+	['reputation'] = function()
+		return GetWatchedFactionInfo()
+	end,
 }) do
 	oUF.Tags[tag] = func
 	oUF.TagEvents[tag] = 'UPDATE_FACTION'
