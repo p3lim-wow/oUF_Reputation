@@ -40,6 +40,11 @@ local function Update(self, event, unit)
 	reputation:SetMinMaxValues(0, max - min)
 	reputation:SetValue(value - min)
 
+	if(reputation.colorStanding) then
+		local color = FACTION_BAR_COLORS[standing]
+		reputation:SetStatusBarColor(color.r, color.g, color.b)
+	end
+
 	if(reputation.PostUpdate) then
 		return reputation:PostUpdate(unit, name, standing, min, max, value)
 	end
