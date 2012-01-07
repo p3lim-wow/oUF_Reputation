@@ -17,7 +17,7 @@ for tag, func in pairs({
 	end,
 	['standing'] = function()
 		local _, standing = GetWatchedFactionInfo()
-		return standing
+		return GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
 	end,
 	['reputation'] = function()
 		return GetWatchedFactionInfo()
