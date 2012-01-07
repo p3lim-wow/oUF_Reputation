@@ -27,6 +27,8 @@ for tag, func in pairs({
 	oUF.TagEvents[tag] = 'UPDATE_FACTION'
 end
 
+oUF.UnitlessTagEvents.UPDATE_FACTION = true
+
 local function Update(self, event, unit)
 	local reputation = self.Reputation
 
