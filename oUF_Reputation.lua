@@ -2,8 +2,6 @@ local __, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
-local development = oUF.version == '1.6.0'
-
 for tag, func in pairs({
 	['currep'] = function()
 		local __, __, min, __, value = GetWatchedFactionInfo()
@@ -25,20 +23,11 @@ for tag, func in pairs({
 		return GetWatchedFactionInfo()
 	end,
 }) do
-	if(development) then
-		oUF.Tags.Methods[tag] = func
-		oUF.Tags.Events[tag] = 'UPDATE_FACTION'
-	else
-		oUF.Tags[tag] = func
-		oUF.TagEvents[tag] = 'UPDATE_FACTION'
-	end
+	oUF.Tags.Methods[tag] = func
+	oUF.Tags.Events[tag] = 'UPDATE_FACTION'
 end
 
-if(development) then
-	oUF.Tags.SharedEvents.UPDATE_FACTION = true
-else
-	oUF.UnitlessTagEvents.UPDATE_FACTION = true
-end
+oUF.Tags.SharedEvents.UPDATE_FACTION = true
 
 local function Update(self, event, unit)
 	local reputation = self.Reputation
