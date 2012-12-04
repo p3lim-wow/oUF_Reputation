@@ -1,22 +1,22 @@
-local __, ns = ...
+local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 for tag, func in pairs({
 	['currep'] = function()
-		local __, __, min, __, value = GetWatchedFactionInfo()
+		local _, _, min, _, value = GetWatchedFactionInfo()
 		return value - min
 	end,
 	['maxrep'] = function()
-		local __, __, min, max = GetWatchedFactionInfo()
+		local _, _, min, max = GetWatchedFactionInfo()
 		return max - min
 	end,
 	['perrep'] = function()
-		local __, __, min, max, value = GetWatchedFactionInfo()
+		local _, _, min, max, value = GetWatchedFactionInfo()
 		return math.floor((value - min) / (max - min) * 100 + 0.5)
 	end,
 	['standing'] = function()
-		local __, standing = GetWatchedFactionInfo()
+		local _, standing = GetWatchedFactionInfo()
 		return GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
 	end,
 	['reputation'] = function()
