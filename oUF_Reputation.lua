@@ -2,42 +2,33 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
+local function GetReputation()
+	local name, standing, min, max, value, id = GetWatchedFactionInfo()
+	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(id)
+
+	if(not friendMin) then
+		return value - min, max - min, GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
+	else
+		return friendMin - friendThreshold, math.min(friendMax - friendThreshold, 8400), friendStanding
+	end
+end
+
 for tag, func in pairs({
 	['currep'] = function()
-		local _, _, min, _, value, id = GetWatchedFactionInfo()
-		local _, friendRep, _, _, _, _, _, friendThreshold = GetFriendshipReputation(id)
-		if(not friendRep) then
-			return value - min
-		else
-			return friendRep - friendThreshold
-		end
+		local min = GetReputation()
+		return min
 	end,
 	['maxrep'] = function()
-		local _, _, min, max, _, id = GetWatchedFactionInfo()
-		local _, _, friendMaxRep, _, _, _, _, friendThreshold = GetFriendshipReputation(id)
-		if(not friendMaxRep) then
-			return max - min
-		else
-			return math.min(friendMaxRep - friendThreshold, 8400)
-		end
+		local _, max = GetReputation()
+		return max
 	end,
 	['perrep'] = function()
-		local _, _, min, max, value_ id = GetWatchedFactionInfo()
-		local _, friendRep, friendMaxRep, _, _, _, _, friendThreshold = GetFriendshipReputation(id)
-		if(not friendRep) then
-			return math.floor((value - min) / (max - min) * 100 + 0.5)
-		else
-			return math.floor((friendRep - friendThreshold) / math.min(friendMaxRep - friendThreshold) * 100 + 0.5)
-		end
+		local min, max = GetReputation()
+		return math.floor(min / max * 100 + 1/2)
 	end,
 	['standing'] = function()
-		local _, standing, _, _, _, id = GetWatchedFactionInfo()
-		local _, _, _, _, _, _, friendTextLevel = GetFriendshipReputation(id)
-		if(not friendTextLevel) then
-			return GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
-		else
-			return friendTextLevel
-		end
+		local _, _, standing = GetReputation()
+		return standing
 	end,
 	['reputation'] = function()
 		return GetWatchedFactionInfo()
@@ -52,33 +43,24 @@ oUF.Tags.SharedEvents.UPDATE_FACTION = true
 local function Update(self, event, unit)
 	local reputation = self.Reputation
 
-	local name, standing, min, max, value, id = GetWatchedFactionInfo()
-	local _, friendRep, friendMaxRep, _, _, _, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(id)
+	local name, standingID, _, _, _, id = GetWatchedFactionInfo()
 	if(not name) then
 		return reputation:Hide()
 	else
 		reputation:Show()
 	end
 
-	if(not friendRep) then
-		reputation:SetMinMaxValues(0, max - min)
-		reputation:SetValue(value - min)
-	else
-		reputation:SetMinMaxValues(0, math.min(friendMaxRep - friendThreshold, 8400))
-		reputation:SetValue(friendRep - friendThreshold)
-	end
+	local min, max, standingText = GetReputation()
+	reputation:SetMinMaxValues(0, max)
+	reputation:SetValue(min)
 
 	if(reputation.colorStanding) then
-		local color = FACTION_BAR_COLORS[standing]
+		local color = FACTION_BAR_COLORS[standingID]
 		reputation:SetStatusBarColor(color.r, color.g, color.b)
 	end
 
 	if(reputation.PostUpdate) then
-		if(not friendRep) then
-			return reputation:PostUpdate(unit, name, standing, min, max, value, id)
-		else
-			return reputation:PostUpdate(unit, name, friendTextLevel, friendThreshold, nextFriendThreshold and nextFriendThreshold or friendMaxRep, friendRep, id)
-		end
+		return reputation:PostUpdate(unit, min, max, name, id, standingID, standingText)
 	end
 end
 
