@@ -13,7 +13,7 @@ local function GetReputation()
 	end
 end
 
-for tag, func in pairs({
+for tag, func in next, {
 	['currep'] = function()
 		local min = GetReputation()
 		return min
@@ -33,7 +33,7 @@ for tag, func in pairs({
 	['reputation'] = function()
 		return GetWatchedFactionInfo()
 	end,
-}) do
+} do
 	oUF.Tags.Methods[tag] = func
 	oUF.Tags.Events[tag] = 'UPDATE_FACTION'
 end
