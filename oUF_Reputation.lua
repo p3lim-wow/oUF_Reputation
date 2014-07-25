@@ -81,7 +81,7 @@ local function Enable(self, unit)
 		self:RegisterEvent('UPDATE_FACTION', Path)
 
 		if(not reputation:GetStatusBarTexture()) then
-			reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+			reputation:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
 		return true
