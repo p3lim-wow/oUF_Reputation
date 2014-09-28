@@ -5,4 +5,8 @@
 ## Notes: Reputation Bar support for oUF layouts.
 ## RequiredDeps: oUF
 
+#@do-not-package@
+## DefaultState: disabled
+#@end-do-not-package@
+
 oUF_Reputation.lua
