@@ -42,6 +42,7 @@ local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
 
 	local element = self.Reputation
+	if(element.PreUpdate) then element:PreUpdate(unit) end
 
 	local name, standingID, _, _, _, id = GetWatchedFactionInfo()
 	if(not name) then
