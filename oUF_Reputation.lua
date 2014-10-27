@@ -41,6 +41,8 @@ end
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
 
 local function Update(self, event, unit)
+	if(self.unit ~= unit) then return end
+
 	local element = self.Reputation
 
 	local name, standingID, _, _, _, id = GetWatchedFactionInfo()
@@ -78,7 +80,7 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UPDATE_FACTION', Path)
+		self:RegisterEvent('UPDATE_FACTION', Path, true)
 
 		if(not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
