@@ -38,8 +38,6 @@ for tag, func in next, {
 	oUF.Tags.Events[tag] = 'UPDATE_FACTION'
 end
 
-oUF.Tags.SharedEvents.UPDATE_FACTION = true
-
 local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
 
