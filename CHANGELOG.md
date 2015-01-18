@@ -1,3 +1,9 @@
+## Changes in 60000.11-Release:
+
+- Added: PreUpdate callback
+- Fixed: Event not flagged as "unitless"
+- Fixed: Unnecessary tag updates
+
 ## Changes in 60000.10-Release:
 
 - Added: License
