@@ -1,3 +1,7 @@
+### Changes in 70000.12-Release:
+
+- Changed: Update Interface version
+
 ### Changes in 60000.11-Release:
 
 - Added: PreUpdate callback
