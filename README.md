@@ -1,7 +1,7 @@
 # oUF Reputation
 
 This is an addon for the popular MMORPG "World of Warcraft".  
-It can be downloaded at [Curse](http://curse.com/addons/wow/ouf-reputation) or at [WoWInterface](http://wowinterface.com/downloads/info12017).
+It can be downloaded at [Curse](//mods.curse.com/addons/wow/ouf-reputation) or at [WoWInterface](//wowinterface.com/downloads/info12017).
 
 ## Description
 
@@ -14,7 +14,7 @@ It has the following features:
 - Tags.
 
 For details on how to implement this in your own layout, please see the wiki:  
-[https://github.com/p3lim-wow/oUF_Reputation/wiki](https://github.com/p3lim-wow/oUF_Reputation/wiki)
+<https://github.com/p3lim-wow/oUF_Reputation/wiki>
 
 ## Feedback
 
@@ -23,4 +23,4 @@ If you would like to report a bug or contribute to the project, please follow [t
 
 ## Legal
 
-Please see the [LICENSE](https://github.com/p3lim-wow/oUF_Reputation/blob/master/LICENSE.txt) file.
+Please see the [LICENSE](//github.com/p3lim-wow/oUF_Reputation/blob/master/LICENSE.txt) file.
