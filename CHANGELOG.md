@@ -1,3 +1,7 @@
+### Changes in 70000.13-Release:
+
+- Fixes: Tags not updating correctly
+
 ### Changes in 70000.12-Release:
 
 - Changed: Update Interface version
