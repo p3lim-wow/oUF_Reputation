@@ -41,8 +41,6 @@ end
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
 
 local function Update(self, event, unit)
-	if(self.unit ~= unit) then return end
-
 	local element = self.Reputation
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
@@ -67,12 +65,16 @@ local function Path(self, ...)
 end
 
 local function ElementEnable(self)
+	self:RegisterEvent('UPDATE_FACTION', Path, true)
+
 	self.Reputation:Show()
 
 	Path(self, 'ElementEnable', 'player')
 end
 
 local function ElementDisable(self)
+	self:UnregisterEvent('UPDATE_FACTION', Path)
+
 	self.Reputation:Hide()
 
 	Path(self, 'ElementDisable', 'player')
@@ -80,7 +82,13 @@ end
 
 local function Visibility(self, event, unit, selectedFactionIndex)
 	local shouldEnable
-	if(GetWatchedFactionInfo()) then
+	local selectedFaction = GetSelectedFaction()
+
+	if(selectedFactionIndex ~= nil) then
+		if(selectedFactionIndex == selectedFaction) then
+			shouldEnable = true
+		end
+	elseif(selectedFaction and select(12, GetFactionInfo(selectedFaction))) then
 		shouldEnable = true
 	end
 
@@ -105,7 +113,9 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UPDATE_FACTION', Path, true)
+		hooksecurefunc('SetWatchedFactionIndex', function(selectedFactionIndex)
+			VisibilityPath(self, 'SetWatchedFactionIndex', 'player', selectedFactionIndex)
+		end)
 
 		if(not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
@@ -117,7 +127,7 @@ end
 
 local function Disable(self)
 	if(self.Reputation) then
-		self:UnregisterEvent('UPDATE_FACTION', Path)
+		ElementDisable(self)
 	end
 end
 
