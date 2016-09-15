@@ -14,22 +14,22 @@ local function GetReputation()
 end
 
 for tag, func in next, {
-	['currep'] = function()
+	['reputation:cur'] = function()
 		return (GetReputation())
 	end,
-	['maxrep'] = function()
+	['reputation:max'] = function(unit, runit)
 		local _, max = GetReputation()
 		return max
 	end,
-	['perrep'] = function()
+	['reputation:per'] = function()
 		local cur, max = GetReputation()
 		return math.floor(cur / max * 100 + 1/2)
 	end,
-	['standing'] = function()
+	['reputation:standing'] = function()
 		local _, _, _, _, _, standingText = GetReputation()
 		return standingText
 	end,
-	['reputation'] = function()
+	['reputation:faction'] = function()
 		local _, _, name = GetReputation()
 		return name
 	end,
