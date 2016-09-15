@@ -3,7 +3,7 @@ local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 local function GetReputation()
-	local name, standingID, min, max, value, factionID = GetWatchedFactionInfo()
+	local name, _, standingID, min, max, value, _, _, _, _, _, _, _, factionID = GetFactionInfo(GetSelectedFaction())
 	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(factionID)
 
 	if(not friendMin) then
