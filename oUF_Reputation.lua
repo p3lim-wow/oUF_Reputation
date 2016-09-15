@@ -3,13 +3,13 @@ local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 local function GetReputation()
-	local name, standing, min, max, value, id = GetWatchedFactionInfo()
-	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(id)
+	local name, standingID, min, max, value, factionID = GetWatchedFactionInfo()
+	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(factionID)
 
 	if(not friendMin) then
-		return value - min, max - min, GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
+		return value - min, max - min, name, factionID, standingID, GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 	else
-		return friendMin - friendThreshold, math.min(friendMax - friendThreshold, 8400), friendStanding
+		return friendMin - friendThreshold, math.min(friendMax - friendThreshold, 8400), name, factionID, standingID, friendStanding
 	end
 end
 
@@ -46,24 +46,19 @@ local function Update(self, event, unit)
 	local element = self.Reputation
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
-	local name, standingID, _, _, _, id = GetWatchedFactionInfo()
-	if(not name) then
-		return element:Hide()
-	else
-		element:Show()
-	end
+	local cur, max, name, factionID, standingID, standingText = GetReputation()
+	if(name) then
+		element:SetMinMaxValues(0, max)
+		element:SetValue(cur)
 
-	local min, max, standingText = GetReputation()
-	element:SetMinMaxValues(0, max)
-	element:SetValue(min)
-
-	if(element.colorStanding) then
-		local color = FACTION_BAR_COLORS[standingID]
-		element:SetStatusBarColor(color.r, color.g, color.b)
+		if(element.colorStanding) then
+			local color = FACTION_BAR_COLORS[standingID]
+			element:SetStatusBarColor(color.r, color.g, color.b)
+		end
 	end
 
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, min, max, name, id, standingID, standingText)
+		return element:PostUpdate(unit, cur, max, name, factionID, standingID, standingText)
 	end
 end
 
@@ -71,8 +66,37 @@ local function Path(self, ...)
 	return (self.Reputation.Override or Update) (self, ...)
 end
 
+local function ElementEnable(self)
+	self.Reputation:Show()
+
+	Path(self, 'ElementEnable', 'player')
+end
+
+local function ElementDisable(self)
+	self.Reputation:Hide()
+
+	Path(self, 'ElementDisable', 'player')
+end
+
+local function Visibility(self, event, unit, selectedFactionIndex)
+	local shouldEnable
+	if(GetWatchedFactionInfo()) then
+		shouldEnable = true
+	end
+
+	if(shouldEnable) then
+		ElementEnable(self)
+	else
+		ElementDisable(self)
+	end
+end
+
+local function VisibilityPath(self, ...)
+	return (self.Reputation.OverrideVisibility or Visibility)(self, ...)
+end
+
 local function ForceUpdate(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return VisibilityPath(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
 local function Enable(self, unit)
@@ -97,4 +121,4 @@ local function Disable(self)
 	end
 end
 
-oUF:AddElement('Reputation', Path, Enable, Disable)
+oUF:AddElement('Reputation', VisibilityPath, Enable, Disable)
