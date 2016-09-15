@@ -15,23 +15,23 @@ end
 
 for tag, func in next, {
 	['currep'] = function()
-		local min = GetReputation()
-		return min
+		return (GetReputation())
 	end,
 	['maxrep'] = function()
 		local _, max = GetReputation()
 		return max
 	end,
 	['perrep'] = function()
-		local min, max = GetReputation()
-		return math.floor(min / max * 100 + 1/2)
+		local cur, max = GetReputation()
+		return math.floor(cur / max * 100 + 1/2)
 	end,
 	['standing'] = function()
-		local _, _, standing = GetReputation()
-		return standing
+		local _, _, _, _, _, standingText = GetReputation()
+		return standingText
 	end,
 	['reputation'] = function()
-		return GetWatchedFactionInfo()
+		local _, _, name = GetReputation()
+		return name
 	end,
 } do
 	oUF.Tags.Methods[tag] = func
