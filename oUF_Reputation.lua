@@ -3,11 +3,11 @@ local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 local function GetReputation()
-	local name, _, standingID, min, max, value, _, _, _, _, _, _, _, factionID = GetFactionInfo(GetSelectedFaction())
+	local name, standingID, min, max, cur, factionID = GetWatchedFactionInfo()
 	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(factionID)
 
 	if(not friendMin) then
-		return value - min, max - min, name, factionID, standingID, GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
+		return cur - min, max - min, name, factionID, standingID, GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 	else
 		return friendMin - friendThreshold, math.min(friendMax - friendThreshold, 8400), name, factionID, standingID, friendStanding
 	end
@@ -82,13 +82,11 @@ end
 
 local function Visibility(self, event, unit, selectedFactionIndex)
 	local shouldEnable
-	local selectedFaction = GetSelectedFaction()
-
 	if(selectedFactionIndex ~= nil) then
-		if(selectedFactionIndex == selectedFaction) then
+		if(selectedFactionIndex > 0) then
 			shouldEnable = true
 		end
-	elseif(selectedFaction and select(12, GetFactionInfo(selectedFaction))) then
+	elseif(not not (GetWatchedFactionInfo())) then
 		shouldEnable = true
 	end
 
@@ -114,7 +112,7 @@ local function Enable(self, unit)
 		element.ForceUpdate = ForceUpdate
 
 		hooksecurefunc('SetWatchedFactionIndex', function(selectedFactionIndex)
-			VisibilityPath(self, 'SetWatchedFactionIndex', 'player', selectedFactionIndex)
+			VisibilityPath(self, 'SetWatchedFactionIndex', 'player', selectedFactionIndex or 0)
 		end)
 
 		if(not element:GetStatusBarTexture()) then
