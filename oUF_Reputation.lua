@@ -13,6 +13,7 @@ local function GetReputation()
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
 			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
+			standingID = 9 -- force paragon's color
 			standingText = PARAGON
 		else
 			standingText = GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
@@ -50,6 +51,7 @@ for tag, func in next, {
 end
 
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
+oUF.colors.reaction[9] = {0, 0.5, 0.9} -- paragon color
 
 local function Update(self, event, unit)
 	local element = self.Reputation
