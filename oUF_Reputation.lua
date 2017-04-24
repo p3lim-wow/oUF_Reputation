@@ -3,14 +3,23 @@ local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 local function GetReputation()
-	local name, standingID, min, max, cur, factionID = GetWatchedFactionInfo()
-	local _, friendMin, friendMax, _, _, _, friendStanding, friendThreshold = GetFriendshipReputation(factionID)
-
-	if(not friendMin) then
-		return cur - min, max - min, name, factionID, standingID, GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
+	local pendingReward
+	local name, standingID, max, _, cur, factionID = GetWatchedFactionInfo()
+	local friendID, _, _, _, _, _, standingText, _, friendMax = GetFriendshipReputation(factionID)
+	if(friendID) then
+		max = friendMax or 1
+		cur = friendMax and math.fmod(cur, max) or 1
 	else
-		return friendMin - friendThreshold, math.min(friendMax - friendThreshold, 8400), name, factionID, standingID, friendStanding
+		if(C_Reputation.IsFactionParagon(factionID)) then
+			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
+		else
+			standingText = GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
+		end
+
+		cur = math.fmod(cur, max)
 	end
+
+	return cur, max, name, factionID, standingID, standingText, pendingReward
 end
 
 for tag, func in next, {
@@ -44,7 +53,7 @@ local function Update(self, event, unit)
 	local element = self.Reputation
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
-	local cur, max, name, factionID, standingID, standingText = GetReputation()
+	local cur, max, name, factionID, standingID, standingText, pendingReward = GetReputation()
 	if(name) then
 		element:SetMinMaxValues(0, max)
 		element:SetValue(cur)
@@ -56,7 +65,7 @@ local function Update(self, event, unit)
 	end
 
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, cur, max, name, factionID, standingID, standingText)
+		return element:PostUpdate(unit, cur, max, name, factionID, standingID, standingText, pendingReward)
 	end
 end
 
