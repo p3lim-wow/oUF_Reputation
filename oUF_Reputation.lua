@@ -19,7 +19,7 @@ local function GetReputation()
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
 			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
-			cur = cur - max
+			cur = math.fmod(cur, max)
 
 			standingID = 9 -- force paragon's color
 			standingText = PARAGON
