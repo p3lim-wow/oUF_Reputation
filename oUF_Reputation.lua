@@ -9,6 +9,7 @@ local function GetReputation()
 	if(friendID) then
 		max = friendMax or 1
 		cur = friendMax and math.fmod(cur, max) or 1
+		standingID = 5 -- force friends' color
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
 			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
