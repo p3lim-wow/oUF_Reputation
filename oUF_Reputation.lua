@@ -50,8 +50,8 @@ local function Update(self, event, unit)
 		element:SetValue(cur)
 
 		if(element.colorStanding) then
-			local color = FACTION_BAR_COLORS[standingID]
-			element:SetStatusBarColor(color.r, color.g, color.b)
+			local colors = self.colors.reaction[standingID]
+			element:SetStatusBarColor(colors[1], colors[2], colors[3])
 		end
 	end
 
