@@ -12,6 +12,7 @@ local function GetReputation()
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
 			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
+			standingText = PARAGON
 		else
 			standingText = GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 		end

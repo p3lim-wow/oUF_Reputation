@@ -5,4 +5,5 @@
 ## Notes: Reputation Bar support for oUF layouts.
 ## RequiredDeps: oUF
 
+PARAGON.lua
 oUF_Reputation.lua
