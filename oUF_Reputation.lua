@@ -77,6 +77,12 @@ local function Update(self, event, unit)
 			local colors = self.colors.reaction[standingID]
 			element:SetStatusBarColor(colors[1], colors[2], colors[3])
 		end
+
+		if(element.Reward) then
+			-- no idea what this function actually does, but Blizzard uses it as well
+			C_Reputation.RequestFactionParagonPreloadRewardData(factionID)
+			element.Reward:SetShown(pendingReward)
+		end
 	end
 
 	if(element.PostUpdate) then
@@ -143,6 +149,10 @@ local function Enable(self, unit)
 
 		if(not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		end
+
+		if(element.Reward and element.Reward:IsObjectType('Texture') and not element.Reward:GetTexture()) then
+			element.Reward:SetAtlas('ParagonReputation_Bag')
 		end
 
 		return true
