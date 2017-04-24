@@ -112,7 +112,9 @@ local function Enable(self, unit)
 		element.ForceUpdate = ForceUpdate
 
 		hooksecurefunc('SetWatchedFactionIndex', function(selectedFactionIndex)
-			VisibilityPath(self, 'SetWatchedFactionIndex', 'player', selectedFactionIndex or 0)
+			if(self:IsElementEnabled('Reputation')) then
+				VisibilityPath(self, 'SetWatchedFactionIndex', 'player', selectedFactionIndex or 0)
+			end
 		end)
 
 		if(not element:GetStatusBarTexture()) then
