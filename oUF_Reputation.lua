@@ -4,7 +4,8 @@ assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 local function GetReputation()
 	local pendingReward
-	local name, standingID, max, _, cur, factionID = GetWatchedFactionInfo()
+	local name, standingID, min, max, cur, factionID = GetWatchedFactionInfo()
+
 	local friendID, _, _, _, _, _, standingText, _, friendMax = GetFriendshipReputation(factionID)
 	if(friendID) then
 		max = friendMax or 1
@@ -13,13 +14,18 @@ local function GetReputation()
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
 			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
+			cur = cur - max
+
 			standingID = 9 -- force paragon's color
 			standingText = PARAGON
 		else
+			if(standingID ~= 8) then
+				max = max - min
+				cur = cur - min
+			end
+
 			standingText = GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 		end
-
-		cur = math.fmod(cur, max)
 	end
 
 	return cur, max, name, factionID, standingID, standingText, pendingReward
