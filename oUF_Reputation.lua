@@ -8,8 +8,13 @@ local function GetReputation()
 
 	local friendID, _, _, _, _, _, standingText, _, friendMax = GetFriendshipReputation(factionID)
 	if(friendID) then
-		max = friendMax or 1
-		cur = friendMax and math.fmod(cur, max) or 1
+		if(friendMax) then
+			max = friendMax
+			cur = math.fmod(cur, max)
+		else
+			max = cur
+		end
+
 		standingID = 5 -- force friends' color
 	else
 		if(C_Reputation.IsFactionParagon(factionID)) then
