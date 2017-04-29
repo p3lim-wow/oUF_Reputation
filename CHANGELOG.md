@@ -1,3 +1,13 @@
+### Changes in 70200.15-Release:
+
+- Added: Support for "Paragon" reputation
+- Added: Icon signifying paragon reward
+- Changed: Update Interface version
+- Changed: Now adheres to oUF colors for faction/reaction
+- Fixed: Visibility hook not respecting element enabled state
+- Fixed: Friends showing colors other than the intended green
+- Fixed: Inconsistencies with reputation values for friends and hated factions
+
 ### Changes in 70100.14-Release:
 
 - Added: Prefix to provided tags names
