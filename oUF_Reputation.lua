@@ -64,6 +64,28 @@ end
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
 oUF.colors.reaction[9] = {0, 0.5, 0.9} -- paragon color
 
+local function UpdateTooltip(element)
+	local cur, max, name, factionID, standingID, standingText, pendingReward = GetReputation()
+	local _, desc = GetFactionInfoByID(factionID)
+	local color = element.__owner.colors.reaction[standingID]
+
+	GameTooltip:SetText(name, color[1], color[2], color[3])
+	GameTooltip:AddLine(desc, nil, nil, nil, true)
+	GameTooltip:AddLine(format("%s (%s / %s)", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max)), 1, 1, 1)
+	GameTooltip:Show()
+end
+
+local function OnEnter(element)
+	element:SetAlpha(element.inAlpha)
+	GameTooltip:SetOwner(element, element.tooltipAnchor)
+	element:UpdateTooltip()
+end
+
+local function OnLeave(element)
+	GameTooltip:Hide()
+	element:SetAlpha(element.outAlpha)
+end
+
 local function Update(self, event, unit)
 	local element = self.Reputation
 	if(element.PreUpdate) then element:PreUpdate(unit) end
@@ -95,9 +117,11 @@ local function Path(self, ...)
 end
 
 local function ElementEnable(self)
+	local element = self.Reputation
 	self:RegisterEvent('UPDATE_FACTION', Path, true)
 
-	self.Reputation:Show()
+	element:Show()
+	element:SetAlpha(element.outAlpha)
 
 	Path(self, 'ElementEnable', 'player')
 end
@@ -153,6 +177,21 @@ local function Enable(self, unit)
 
 		if(element.Reward and element.Reward:IsObjectType('Texture') and not element.Reward:GetTexture()) then
 			element.Reward:SetAtlas('ParagonReputation_Bag')
+		end
+
+		if(element:IsMouseEnabled()) then
+			element.UpdateTooltip = element.UpdateTooltip or UpdateTooltip
+			element.tooltipAnchor = element.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
+			element.inAlpha = element.inAlpha or 1
+			element.outAlpha = element.outAlpha or 1
+
+			if(not element:GetScript('OnEnter')) then
+				element:SetScript('OnEnter', OnEnter)
+			end
+
+			if(not element:GetScript('OnLeave')) then
+				element:SetScript('OnLeave', OnLeave)
+			end
 		end
 
 		return true
