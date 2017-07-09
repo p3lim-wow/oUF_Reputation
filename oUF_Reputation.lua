@@ -86,6 +86,10 @@ local function OnLeave(element)
 	element:SetAlpha(element.outAlpha)
 end
 
+local function OnMouseUp()
+	ToggleCharacter("ReputationFrame")
+end
+
 local function Update(self, event, unit)
 	local element = self.Reputation
 	if(element.PreUpdate) then element:PreUpdate(unit) end
@@ -191,6 +195,10 @@ local function Enable(self, unit)
 
 			if(not element:GetScript('OnLeave')) then
 				element:SetScript('OnLeave', OnLeave)
+			end
+
+			if(not element:GetScript('OnMouseUp')) then
+				element:SetScript('OnMouseUp', OnMouseUp)
 			end
 		end
 
