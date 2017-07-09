@@ -6,32 +6,29 @@ local function GetReputation()
 	local pendingReward
 	local name, standingID, min, max, cur, factionID = GetWatchedFactionInfo()
 
-	local friendID, _, _, _, _, _, standingText, _, friendMax = GetFriendshipReputation(factionID)
+	local friendID, _, totalMax, _, _, _, standingText, _, nextThreshold = GetFriendshipReputation(factionID)
 	if(friendID) then
-		if(friendMax) then
-			max = friendMax
-			cur = math.fmod(cur, max)
-		else
-			max = cur
-		end
-
+		max = nextThreshold or totalMax
 		standingID = 5 -- force friends' color
 	else
-		if(C_Reputation.IsFactionParagon(factionID)) then
-			cur, max, _, pendingReward = C_Reputation.GetFactionParagonInfo(factionID)
-			cur = math.fmod(cur, max)
-
-			standingID = 9 -- force paragon's color
+		local value, nextThreshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+		if(value) then
+			cur = value % nextThreshold
+			min = 0
+			max = nextThreshold
+			pendingReward = hasRewardPending
+			standingID = MAX_REPUTATION_REACTION + 1 -- force paragon's color
 			standingText = PARAGON
-		else
-			if(standingID ~= 8) then
-				max = max - min
-				cur = cur - min
-			end
-
-			standingText = GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 		end
 	end
+
+	max = max - min
+	cur = cur - min
+	-- cur and max are both 0 for maxed out friendships and factions
+	if(cur == max) then
+		cur, max = 1, 1
+	end
+	standingText = standingText or GetText('FACTION_STANDING_LABEL' .. standingID, UnitSex('player'))
 
 	return cur, max, name, factionID, standingID, standingText, pendingReward
 end
@@ -62,7 +59,7 @@ for tag, func in next, {
 end
 
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
-oUF.colors.reaction[9] = {0, 0.5, 0.9} -- paragon color
+oUF.colors.reaction[MAX_REPUTATION_REACTION + 1] = {0, 0.5, 0.9} -- paragon color
 
 local function UpdateTooltip(element)
 	local cur, max, name, factionID, standingID, standingText, pendingReward = GetReputation()
@@ -71,7 +68,7 @@ local function UpdateTooltip(element)
 
 	GameTooltip:SetText(name, color[1], color[2], color[3])
 	GameTooltip:AddLine(desc, nil, nil, nil, true)
-	if (cur ~= max) then
+	if(cur ~= max) then
 		GameTooltip:AddLine(format("%s (%s / %s)", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max)), 1, 1, 1)
 	else
 		GameTooltip:AddLine(standingText, 1, 1, 1)
