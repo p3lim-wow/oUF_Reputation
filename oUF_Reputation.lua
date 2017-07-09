@@ -71,7 +71,11 @@ local function UpdateTooltip(element)
 
 	GameTooltip:SetText(name, color[1], color[2], color[3])
 	GameTooltip:AddLine(desc, nil, nil, nil, true)
-	GameTooltip:AddLine(format("%s (%s / %s)", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max)), 1, 1, 1)
+	if (cur ~= max) then
+		GameTooltip:AddLine(format("%s (%s / %s)", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max)), 1, 1, 1)
+	else
+		GameTooltip:AddLine(standingText, 1, 1, 1)
+	end
 	GameTooltip:Show()
 end
 
