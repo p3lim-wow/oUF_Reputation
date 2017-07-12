@@ -6,9 +6,11 @@ local function GetReputation()
 	local pendingReward
 	local name, standingID, min, max, cur, factionID = GetWatchedFactionInfo()
 
-	local friendID, _, totalMax, _, _, _, standingText, _, nextThreshold = GetFriendshipReputation(factionID)
+	local friendID, _, _, _, _, _, standingText, _, nextThreshold = GetFriendshipReputation(factionID)
 	if(friendID) then
-		max = nextThreshold or totalMax
+		if(not nextThreshold) then
+			min, max, cur = 0, 1, 1 -- force a full bar when maxed out
+		end
 		standingID = 5 -- force friends' color
 	else
 		local value, nextThreshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
@@ -24,7 +26,7 @@ local function GetReputation()
 
 	max = max - min
 	cur = cur - min
-	-- cur and max are both 0 for maxed out friendships and factions
+	-- cur and max are both 0 for maxed out factions
 	if(cur == max) then
 		cur, max = 1, 1
 	end
