@@ -128,7 +128,7 @@ local function ElementEnable(self)
 	self:RegisterEvent('UPDATE_FACTION', Path, true)
 
 	element:Show()
-	element:SetAlpha(element.outAlpha)
+	element:SetAlpha(element.outAlpha or 1)
 
 	Path(self, 'ElementEnable', 'player')
 end
