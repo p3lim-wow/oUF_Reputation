@@ -1,3 +1,11 @@
+### Changes in 70300.16-Release:
+
+- Changed: Update Interface version
+- Added: Tooltip support
+- Added: Fade support
+- Added: Mouse click support
+- Fixed: Reputation calculations
+
 ### Changes in 70200.15-Release:
 
 - Added: Support for "Paragon" reputation
