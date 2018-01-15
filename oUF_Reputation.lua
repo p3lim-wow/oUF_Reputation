@@ -65,13 +65,14 @@ oUF.colors.reaction[MAX_REPUTATION_REACTION + 1] = {0, 0.5, 0.9} -- paragon colo
 
 local function UpdateTooltip(element)
 	local cur, max, name, factionID, standingID, standingText, pendingReward = GetReputation()
+	local rewardAtlas = pendingReward and "|A:ParagonReputation_Bag:0:0:0:0|a" or ""
 	local _, desc = GetFactionInfoByID(factionID)
 	local color = element.__owner.colors.reaction[standingID]
 
 	GameTooltip:SetText(name, color[1], color[2], color[3])
 	GameTooltip:AddLine(desc, nil, nil, nil, true)
 	if(cur ~= max) then
-		GameTooltip:AddLine(format("%s (%s / %s)", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max)), 1, 1, 1)
+		GameTooltip:AddLine(format("%s (%s / %s)  %s", standingText, BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max), rewardAtlas), 1, 1, 1)
 	else
 		GameTooltip:AddLine(standingText, 1, 1, 1)
 	end
