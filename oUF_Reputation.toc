@@ -5,5 +5,8 @@
 ## Notes: Reputation Bar support for oUF layouts.
 ## RequiredDeps: oUF
 
+## X-Curse-Project-ID: 20341
+## X-WoWI-ID: 12017
+
 PARAGON.lua
 oUF_Reputation.lua
