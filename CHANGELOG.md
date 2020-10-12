@@ -1,3 +1,8 @@
+### Changes in 90000.18-Release:
+
+- Added: Documentation
+- Changed: Update Interface version
+
 ### Changes in 80000.17-Release:
 
 - Added: Pending Paragon reward indicator to the tooltip
