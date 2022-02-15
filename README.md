@@ -1,7 +1,12 @@
 # oUF Reputation
 
 This is an addon for the popular MMORPG "World of Warcraft".  
-It can be downloaded at [Curse](//mods.curse.com/addons/wow/ouf-reputation) or at [WoWInterface](//wowinterface.com/downloads/info12017).
+It can be downloaded at one of the following sites:
+
+- [Curse](https://www.curseforge.com/wow/addons/ouf-reputation)
+- [WoWInterface](https://wowinterface.com/downloads/info12017)
+- [Wago](https://addons.wago.io/addons/ouf-reputation)
+- [GitHub](https://github.com/p3lim-wow/oUF_Reputation/releases)
 
 ## Description
 
