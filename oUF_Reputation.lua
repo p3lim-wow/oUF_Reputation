@@ -137,7 +137,7 @@ for tag, func in next, {
 end
 
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
-oUF.colors.reaction[MAX_REPUTATION_REACTION + 1] = {0, 0.5, 0.9} -- paragon color
+oUF.colors.reaction[MAX_REPUTATION_REACTION + 1] = oUF:CreateColor(0, 0.5, 0.9) -- paragon color
 
 local function UpdateTooltip(element)
 	local cur, max, name, factionID, standingID, standingText, pendingReward = GetReputation()
