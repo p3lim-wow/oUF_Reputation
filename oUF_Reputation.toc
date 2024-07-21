@@ -9,5 +9,4 @@
 ## X-WoWI-ID: 12017
 ## X-Wago-ID: anKWJZ6E
 
-PARAGON.lua
 oUF_Reputation.lua
