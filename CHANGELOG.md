@@ -1,3 +1,10 @@
+### Changes in 110000.23-Release:
+
+- Changed: Update Interface version
+- Changed: Use oUF:CreateColor for all colors
+- Removed: Deprecations
+- Removed: Global leak
+
 ### Changes in 90200.22-Release:
 
 - Changed: Update Interface version

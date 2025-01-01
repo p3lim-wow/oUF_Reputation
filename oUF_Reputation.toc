@@ -1,4 +1,4 @@
-## Interface: 100200
+## Interface: 110007
 ## Author: p3lim
 ## Version: @project-version@
 ## Title: oUF Reputation
@@ -9,5 +9,4 @@
 ## X-WoWI-ID: 12017
 ## X-Wago-ID: anKWJZ6E
 
-PARAGON.lua
 oUF_Reputation.lua
